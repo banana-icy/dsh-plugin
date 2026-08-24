@@ -42,7 +42,7 @@ plan 模式下 **bash/pwsh 不再整体封锁**：只读命令（`ls/cat/grep/fi
 ### 1. 把本仓库 clone 到本地
 
 ```sh
-git clone https://github.com/<你的账号>/dsh-traffic-light-pet.git
+git clone https://github.com/banana-icy/dsh-plugin.git
 ```
 
 ### 2. 在 profile 的 package.json 声明 link 依赖
