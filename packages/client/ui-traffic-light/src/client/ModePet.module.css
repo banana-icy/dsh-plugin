@@ -1,0 +1,36 @@
+.pet {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  /* Floating-pet layer: one step above whale-girl's own pet overlay, so this
+     pet stays clickable when both are installed. */
+  z-index: 2147483001;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  -webkit-user-drag: none;
+}
+
+.pet:active {
+  cursor: grabbing;
+}
+
+.pet img {
+  display: block;
+  width: 96px;
+  height: 96px;
+  pointer-events: none;
+}
+
+/* Failure blink: the blink image breathes between 30% and full opacity. */
+.blink {
+  animation: pet-blink 1.5s ease-in-out infinite;
+}
+
+@keyframes pet-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}

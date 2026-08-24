@@ -1,0 +1,10 @@
+# node_modules and install artifacts
+node_modules/
+.pnpm-store/
+
+# per-package build state (the bundled lib/ is shipped intentionally)
+packages/*/*/tsconfig.tsbuildinfo
+
+# editor / OS
+.DS_Store
+*.log

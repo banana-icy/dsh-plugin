@@ -1,0 +1,67 @@
+{
+  "schema": "1.0",
+  "name": "@deepseek-ai/dsh-modes",
+  "description": "Self-contained build/plan agent modes with enforced read-only tool filtering, slash commands, and a reviewed plan exit — like opencode's build/plan mode loop.",
+  "type": "tool",
+  "capabilities": [
+    "agent-modes",
+    "plan-mode",
+    "tool-filtering",
+    "plan-review"
+  ],
+  "lifecycle": {
+    "install": [
+      "Register the modes/state session event for logged per-agent mode",
+      "Register the /mode, /plan, /build slash commands",
+      "Register the exit_plan_mode tool for plan review approval",
+      "Register the modes:policy system prompt section for mode guidance",
+      "Register the modes projection unit for Web client consumption",
+      "Install plan-mode tool restriction and execution guard"
+    ]
+  },
+  "config": {
+    "exitToolName": {
+      "type": "string",
+      "default": "exit_plan_mode",
+      "description": "Model-facing tool name for the plan review exit"
+    },
+    "plan": {
+      "type": "object",
+      "description": "Plan-mode configuration",
+      "properties": {
+        "blockedTools": {
+          "type": "array",
+          "description": "Tool names removed from the plan-mode catalog and denied at execution"
+        },
+        "rejectMessage": {
+          "type": "string",
+          "description": "Denial reason returned to the executor for a blocked plan-mode call"
+        },
+        "section": {
+          "type": "string",
+          "description": "Guidance rendered while plan mode is active"
+        }
+      }
+    },
+    "build": {
+      "type": "object",
+      "description": "Build-mode configuration",
+      "properties": {
+        "section": {
+          "type": "string",
+          "description": "Guidance rendered while build mode is active (empty string renders nothing)"
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "peer": [
+      "@deepseek-ai/cordis",
+      "@deepseek-ai/dsh-tools",
+      "@deepseek-ai/dsh-system-prompt",
+      "@deepseek-ai/dsh-agent",
+      "@deepseek-ai/dsh-session",
+      "@deepseek-ai/dsh-invariants"
+    ]
+  }
+}

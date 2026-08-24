@@ -1,0 +1,3 @@
+- insert:
+    - id: ui-traffic-light
+      name: '@deepseek-ai/dsh-client-ui-traffic-light'
