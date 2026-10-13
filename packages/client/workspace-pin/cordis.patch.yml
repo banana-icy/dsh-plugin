@@ -1,0 +1,13 @@
+# dsh-workspace-pin — DSH bundle patch layer.
+#
+# Client-only plugin: the host half (lib/index.js) is a no-op. The browser half
+# (lib/client.js, declared through dsh.client in package.json) adds one row to a
+# workspace row's ⋯ menu and reorders through the host's durable workspace order
+# API (workspace.insertBefore). No sessions are touched.
+#
+# The entry exists so the package is a loader entry the client-module scanner
+# (dsh-client-modules) can discover and serve under /plugins.
+
+- insert:
+    - id: dsh-workspace-pin
+      name: dsh-workspace-pin

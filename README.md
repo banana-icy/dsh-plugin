@@ -4,6 +4,8 @@
 
 一个**悬浮红绿灯桌宠**：宠物图片随 agent 模式实时变化（绿灯=空闲、黄灯=plan、红灯=build 执行中、黄闪/红闪=失败停住），支持拖动固定位置（位置持久化到 localStorage）、点击切换模式，外加 Cmd+P / Ctrl+P 快捷键全局切换 plan ↔ build。
 
+此外还包含一个独立的侧边栏插件 [`dsh-workspace-pin`](#dsh-workspace-pin工作区置顶)（工作区置顶），见文末。
+
 ## 三个包
 
 | 包 | 目录 | 职责 |
@@ -124,6 +126,41 @@ pnpm --filter @deepseek-ai/dsh-client-ui-mode bundle
 - `pet-yellow-blink.png` / `pet-red-blink.png` — 失败闪烁图
 
 node half 实时读盘伺服（`no-cache`），**替换文件即生效，无需重启**。
+
+## dsh-workspace-pin（工作区置顶）
+
+侧边栏的**工作区置顶**，独立于上面三个包，从 npm 单独安装。
+
+- 工作区行 `⋯` 菜单的第一项是「**置顶工作区**」，已置顶的显示「**取消置顶**」
+- 置顶 = 把该工作区移到工作区列表最前，走宿主自己的持久顺序 API（`workspace.insertBefore`），所有客户端共享同一顺序，重启后仍在
+- 已置顶的工作区行显示实心图钉标记，样式与应用给已置顶**会话**用的标记一致
+- 取消置顶按记录的邻居还原位置（后邻优先，其次前邻，都没有就追加）
+- **完全不碰会话**——没有任何会话置顶逻辑
+
+图标用的是应用自带 `@deepseek-ai/dsh-client-ui-primitives` 里 `IconPinOutlineArtwork` / `IconPinFillArtwork` 的原始路径数据（16×16、描边 1px），未置顶空心、已置顶实心。
+
+工作区行的 `⋯` 菜单由 `ui-workspace` 用本地数组渲染、**没有声明 slot**，所以本插件在菜单打开时把一行注入进去，复用菜单自己的 class，并用 `MutationObserver` 在 React 重渲染后自愈。定位靠 `data-row-key="workspace:<id>"` 和"行内第一个 button 就是 `⋯`"，不依赖界面文案。
+
+```sh
+# 装进桌面端 profile
+dsh plugin --profile desktop add dsh-workspace-pin
+```
+
+桌面端也可以在侧边栏「插件」页点「添加插件」粘同一个包名，装完点「Enable now」并重启应用。
+
+| 目录 | 说明 |
+|---|---|
+| `packages/client/workspace-pin/` | 包源码 + 预构建 `lib/` |
+
+开发（该包刻意不带依赖）：
+
+```sh
+cd packages/client/workspace-pin
+node scripts/build-client.mjs          # 由 src/client-src.js 生成 lib/client.js
+node --test test/client.spec.mjs       # jsdom 集成测试，7 例
+```
+
+`npm publish` 在该包目录执行；`prepack` 会自动重建 `lib/client.js`。
 
 ## License
 

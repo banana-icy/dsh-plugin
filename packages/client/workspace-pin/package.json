@@ -1,0 +1,60 @@
+{
+  "name": "dsh-workspace-pin",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "description": "Pin workspaces to the front of the DSH sidebar from the workspace row's ⋯ menu.",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/banana-icy/dsh-plugin.git",
+    "directory": "packages/client/workspace-pin"
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "plugin",
+    "sidebar",
+    "workspace",
+    "pin"
+  ],
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./client": "./lib/client.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib",
+    "src",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "node scripts/build-client.mjs",
+    "prepack": "node scripts/build-client.mjs",
+    "check": "node scripts/build-client.mjs --check",
+    "test": "node --test test/client.spec.mjs"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.2"
+  },
+  "engines": {
+    "dsh": ">=0.2.0-rc.2"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web"
+    }
+  }
+}
