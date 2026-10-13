@@ -1,0 +1,10 @@
+# dsh-esc-pause bundle patch layer —— insert one row mounting the plugin into
+# the profile tree. `dsh plugin add` applies it automatically through the
+# `dsh.bundle.patch` pointer in package.json; for a manual `link:` install,
+# add the same insert line to the profile's own cordis.patch.yml instead.
+#
+# The row carries no config: the browser half is composed from the client
+# roster, which transports no row config to the browser.
+- insert:
+    - id: dsh-esc-pause
+      name: dsh-esc-pause

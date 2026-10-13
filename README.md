@@ -4,7 +4,18 @@
 
 一个**悬浮红绿灯桌宠**：宠物图片随 agent 模式实时变化（绿灯=空闲、黄灯=plan、红灯=build 执行中、黄闪/红闪=失败停住），支持拖动固定位置（位置持久化到 localStorage）、点击切换模式，外加 Cmd+P / Ctrl+P 快捷键全局切换 plan ↔ build。
 
-此外还包含一个独立的侧边栏插件 [`dsh-workspace-pin`](#dsh-workspace-pin工作区置顶)（工作区置顶），见文末。
+此外还包含三个独立插件包，见文末：`dsh-workspace-pin`（工作区置顶）、`dsh-esc-pause`（双击 Esc 中断回合）、`@dsh-external/dsh-automation`（定时任务）。
+
+## 本仓库包含的包
+
+| 包 | 目录 | 类型 |
+|---|---|---|
+| `@deepseek-ai/dsh-modes` | `packages/plan/modes/` | 宿主插件 |
+| `@deepseek-ai/dsh-client-ui-traffic-light` | `packages/client/ui-traffic-light/` | 客户端插件 |
+| `@deepseek-ai/dsh-client-ui-mode` | `packages/client/ui-mode/` | 客户端插件 |
+| `dsh-workspace-pin` | `packages/client/workspace-pin/` | 客户端插件（独立发布） |
+| `dsh-esc-pause` | `packages/client/esc-pause/` | 客户端插件（独立发布） |
+| `@dsh-external/dsh-automation` | `packages/schedule/automation/` | 宿主 + 客户端插件（独立发布） |
 
 ## 三个包
 
@@ -161,6 +172,36 @@ node --test test/client.spec.mjs       # jsdom 集成测试，7 例
 ```
 
 `npm publish` 在该包目录执行；`prepack` 会自动重建 `lib/client.js`。
+
+## dsh-esc-pause（双击 Esc 中断回合）
+
+给 Web 界面加一个键盘手势：**连按两次 Esc** 中断当前正在生成的回合，等同于输入框右下角的停止按钮（`session.cancel()`）。
+
+- 只读取事件、不 `preventDefault`——关闭菜单、退出面板、清空选择等既有单次 Esc 行为全部不变
+- 有对话框 / 菜单 / 下拉打开时，这次 Esc 归弹层，插件把它当「作废」而不是「第一次」
+- 没有选中会话、或会话没有运行中的回合时不发任何请求
+- 忽略长按自动重复、带修饰键的 Esc、输入法组字中的 Esc
+- 判定窗口固定 400ms（客户端行不携带 `cordis.yml` 的 `config`，所以不可配置）
+
+```sh
+dsh plugin --profile desktop add dsh-esc-pause
+```
+
+| 目录 | 说明 |
+|---|---|
+| `packages/client/esc-pause/` | 包源码 + 预构建 `lib/` |
+
+## @dsh-external/dsh-automation（定时任务）
+
+按计划在全新的 Agent 会话里跑编码任务，并从 Web 或 Agent 侧管理它们。宿主半 + 客户端半双面插件。
+
+```sh
+dsh plugin --profile desktop add @dsh-external/dsh-automation
+```
+
+| 目录 | 说明 |
+|---|---|
+| `packages/schedule/automation/` | 包源码 + 预构建 `lib/` + `docs/` 截图与设计文档 |
 
 ## License
 
